@@ -31,12 +31,12 @@ function CocktailPage(){
 
     if (loading) return (
     <div className="flex items-center justify-center h-screen">
-        <p className="text-xl text-center font-[PPGoshaSans-Regular]">Loading...</p>
+        <p className="text-l text-center font-[PPGoshaSans-Regular]">Loading...</p>
     </div>);
     if (error) return (
     <div className="flex flex-col gap-10 items-center justify-center h-screen">
-        <p className="text-xl text-center font-[PPGoshaSans-Regular]">Error: {error}</p>
-        <button className="text-xl text-center font-[PPGoshaSans-Regular] p-2 border cursor-pointer" onClick={() => navigate("/")}>Go back</button>
+        <p className="text-l text-center font-[PPGoshaSans-Regular]">Error: {error}</p>
+        <button className="text-l text-center font-[PPGoshaSans-Regular] p-2 border cursor-pointer" onClick={() => navigate("/")}>Go back</button>
     </div>)
     if (!cocktail) return null;
 
@@ -51,18 +51,18 @@ function CocktailPage(){
 
     return(
             <div>
-                <header className="grid grid-cols-[3fr_7fr_2fr] grid-rows-1 border-b h-25 items-center">
-                <div className="col-start-1 col-span-1 border-r h-full flex items-center justify-center">
-                    <h1 className="font-[PPGoshaSans-Regular] text-6xl tracking-wider">{cocktail.strDrink}</h1>
+                <header className="flex flex-row justify-between sm:grid grid-cols-[3fr_7fr_2fr] grid-rows-1 border-b h-15 sm:h-25 items-center">
+                <div className="col-start-1 col-span-1 sm:border-r h-full flex items-center justify-center ml-4">
+                    <h1 className="font-[PPGoshaSans-Regular] text-2xl sm:tetx-4xl lg:text-5xl 2xl:text-6xl tracking-wider">{cocktail.strDrink}</h1>
                 </div>
                 <div className="col-start-2"/>
                 <div className="col-start-3 col-span-1 border-l h-full flex items-center justify-center">
-                    <button className="font-[PPGoshaSans-Regular] text-2xl tracking-wide
-                    h-full w-full cursor-pointer" onClick={() => navigate("/")}>New search</button>
+                    <button className="font-[PPGoshaSans-Regular] text-l lg:text-xl 2xl:text-2xl tracking-wide
+                    h-full w-full cursor-pointer px-5" onClick={() => navigate("/")}>New search</button>
                 </div>
             </header>
-                <main className="grid grid-cols-[4fr_1fr_7fr] h-[calc(100vh-100px)] overflow-hidden">
-                    <div className="flex flex-col gap-5 col-start-1 col-span-1 ml-5 mb-9 justify-end font-[CabinetGrotesk] text-xl tracking-wider">
+                <main className="grid grid-cols-1 grid-rows-2 sm:grid-rows-1 sm:grid-cols-[4fr_1fr_7fr] sm:h-[calc(100vh-100px)] overflow-hidden">
+                    <div className="flex flex-col gap-5 row-start-2 pr-5 mt-5 sm:mt-0 sm:pr-0 sm:row-start-1 sm:col-start-1 sm:col-span-1 ml-5 mb-9 sm:justify-end font-[CabinetGrotesk] sm:text-l xl:text-xl tracking-wider">
                         <ul>
                             {ingredients.map((item, index) => (
                                 <li key={index}>{item}</li>
@@ -70,8 +70,8 @@ function CocktailPage(){
                         </ul>
                         <p>{cocktail.strInstructions}</p>
                     </div>
-                    <div className="col-start-3 h-full overflow-hidden">
-                        <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} className="w-full h-auto max-h-[calc(100vh-100px)] object-cover"/>
+                    <div className="sm:col-start-3 h-full overflow-hidden border-b sm:border-b-0 sm:border-l">
+                        <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} className="w-full h-full object-cover"/>
                     </div>
                 </main>
             </div>
