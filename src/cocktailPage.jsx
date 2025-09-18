@@ -1,10 +1,5 @@
 function CocktailPage(){
     return(
-        <div>
-            <header>
-                <h1>MOJITO</h1>
-                <button>New search</button>
-            </header>
             <main>
                 <div>
                     <ul>
@@ -20,7 +15,6 @@ function CocktailPage(){
                     <img src="./assets/img/mojito.png" alt="cocktail image" />
                 </div>
             </main>
-        </div>
     )
 }
 
