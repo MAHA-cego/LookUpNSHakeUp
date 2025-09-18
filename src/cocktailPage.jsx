@@ -1,7 +1,10 @@
-import {useEffect, useState} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
-function CocktailPage({ searchTerm, onReset }){
+function CocktailPage(){
+    const { name } = useParams();
+    const navigate = useNavigate();
     const [cocktail, setCocktail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -11,7 +14,7 @@ function CocktailPage({ searchTerm, onReset }){
         setError(null);
 
 
-        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchTerm}`)
+        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`)
         .then((response) => {
             if(!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -24,7 +27,7 @@ function CocktailPage({ searchTerm, onReset }){
         })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
-    }, [searchTerm]);
+    }, [name]);
 
     if (loading) return (
     <div className="flex items-center justify-center h-screen">
@@ -33,7 +36,7 @@ function CocktailPage({ searchTerm, onReset }){
     if (error) return (
     <div className="flex flex-col gap-10 items-center justify-center h-screen">
         <p className="text-xl text-center font-[PPGoshaSans-Regular]">Error: {error}</p>
-        <button className="text-xl text-center font-[PPGoshaSans-Regular] p-2 border cursor-pointer" onClick={onReset}>Go back</button>
+        <button className="text-xl text-center font-[PPGoshaSans-Regular] p-2 border cursor-pointer" onClick={() => navigate("/")}>Go back</button>
     </div>)
     if (!cocktail) return null;
 
@@ -55,7 +58,7 @@ function CocktailPage({ searchTerm, onReset }){
                 <div className="col-start-2"/>
                 <div className="col-start-3 col-span-1 border-l h-full flex items-center justify-center">
                     <button className="font-[PPGoshaSans-Regular] text-2xl tracking-wide
-                    h-full w-full cursor-pointer" onClick={onReset}>New search</button>
+                    h-full w-full cursor-pointer" onClick={() => navigate("/")}>New search</button>
                 </div>
             </header>
                 <main className="grid grid-cols-[4fr_1fr_7fr] h-[calc(100vh-100px)] overflow-hidden">

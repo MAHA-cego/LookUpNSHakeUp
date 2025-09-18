@@ -1,9 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
 function SearchPage({onSearch}){
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const value = e.target.elements.cocktail.value.trim();
         if (value) {
-            onSearch(value);
+            navigate(`/cocktail/${value}`);
         }
     }
 
