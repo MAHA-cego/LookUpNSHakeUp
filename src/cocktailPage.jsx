@@ -1,22 +1,66 @@
-import mojitoImg from './assets/img/mojito.png';
+import {useEffect, useState} from 'react';
+
 
 function CocktailPage(){
+    const [cocktail, setCocktail] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=mojito')
+        .then((response) => {
+            if(!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then((data) => {
+            if (!data.drinks || data.drinks.length === 0) {
+                throw new Error('No drinks found');
+            }
+            setCocktail(data.drinks[0]);
+        })
+        .catch((err) => setError(err.message))
+        .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return <p className="p-5 text-xl">Loading...</p>;
+    if (error) return <p className="p-5 text-xl text-red-600">Error: {error}</p>
+    if (!cocktail) return null;
+
+    const ingredients = [];
+    for (let i = 1; i <= 15; i++) {
+        const ingredient = cocktail[`strIngredient${i}`];
+        const measure = cocktail[`strMeasure${i}`];
+        if (ingredient) {
+            ingredients.push(measure ? `${measure.trim()} ${ingredient.trim()}` : ingredient.trim())
+        }
+    }
+
     return(
-            <main className="grid grid-cols-[4fr_1fr_7fr] h-[calc(100vh-100px)] overflow-hidden">
-                <div className="flex flex-col gap-5 col-start-1 col-span-1 ml-5 mb-9 justify-end font-[CabinetGrotesk] text-xl tracking-wider">
-                    <ul>
-                        <li>2-3 oz Light rum</li>
-                        <li>Juice of 1 Lime</li>
-                        <li>2 tsp Sugar</li>
-                        <li>2-4 Mint</li>
-                        <li>Soda water</li>
-                    </ul>
-                    <p>Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.</p>
+            <div>
+                <header className="grid grid-cols-[3fr_7fr_2fr] grid-rows-1 border-b h-25 items-center">
+                <div className="col-start-1 col-span-1 border-r h-full flex items-center justify-center">
+                    <h1 className="font-[PPGoshaSans-Regular] text-6xl tracking-wider">{cocktail.strDrink}</h1>
                 </div>
-                <div className="col-start-3 h-full overflow-hidden">
-                    <img src={mojitoImg} alt="cocktail image" className="w-full h-auto max-h-[calc(100vh-100px)] object-cover"/>
+                <div className="col-start-2"/>
+                <div className="col-start-3 col-span-1 border-l h-full flex items-center justify-center">
+                    <button className="font-[PPGoshaSans-Regular] text-2xl tracking-wide
+                    h-full w-full cursor-pointer">New search</button>
                 </div>
-            </main>
+            </header>
+                <main className="grid grid-cols-[4fr_1fr_7fr] h-[calc(100vh-100px)] overflow-hidden">
+                    <div className="flex flex-col gap-5 col-start-1 col-span-1 ml-5 mb-9 justify-end font-[CabinetGrotesk] text-xl tracking-wider">
+                        <ul>
+                            {ingredients.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                        <p>{cocktail.strInstructions}</p>
+                    </div>
+                    <div className="col-start-3 h-full overflow-hidden">
+                        <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} className="w-full h-auto max-h-[calc(100vh-100px)] object-cover"/>
+                    </div>
+                </main>
+            </div>
     )
 }
 
