@@ -1,13 +1,17 @@
 import {useEffect, useState} from 'react';
 
 
-function CocktailPage(){
+function CocktailPage({ searchTerm, onReset }){
     const [cocktail, setCocktail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=mojito')
+        setLoading(true);
+        setError(null);
+
+
+        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchTerm}`)
         .then((response) => {
             if(!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -20,10 +24,17 @@ function CocktailPage(){
         })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
-    }, []);
+    }, [searchTerm]);
 
-    if (loading) return <p className="p-5 text-xl">Loading...</p>;
-    if (error) return <p className="p-5 text-xl text-red-600">Error: {error}</p>
+    if (loading) return (
+    <div className="flex items-center justify-center h-screen">
+        <p className="text-xl text-center font-[PPGoshaSans-Regular]">Loading...</p>
+    </div>);
+    if (error) return (
+    <div className="flex flex-col gap-10 items-center justify-center h-screen">
+        <p className="text-xl text-center font-[PPGoshaSans-Regular]">Error: {error}</p>
+        <button className="text-xl text-center font-[PPGoshaSans-Regular] p-2 border cursor-pointer" onClick={onReset}>Go back</button>
+    </div>)
     if (!cocktail) return null;
 
     const ingredients = [];
@@ -44,7 +55,7 @@ function CocktailPage(){
                 <div className="col-start-2"/>
                 <div className="col-start-3 col-span-1 border-l h-full flex items-center justify-center">
                     <button className="font-[PPGoshaSans-Regular] text-2xl tracking-wide
-                    h-full w-full cursor-pointer">New search</button>
+                    h-full w-full cursor-pointer" onClick={onReset}>New search</button>
                 </div>
             </header>
                 <main className="grid grid-cols-[4fr_1fr_7fr] h-[calc(100vh-100px)] overflow-hidden">
